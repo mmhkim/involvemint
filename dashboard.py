@@ -31,7 +31,7 @@ def makeBar(df, yValue, texts, width, height, scale=0):
 
     return bar, smallText
 
-sl.image(Image.open("/Users/mmhki/OneDrive/Documents/involvemint2021/logoimage.png"))
+sl.image(Image.open("logoimage.png"))
 sl.title("Minting and Transaction Report")
 sl.write(""" ### Find the minting and tranascation reports below
 """)
