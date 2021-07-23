@@ -1,5 +1,5 @@
 #from altair.vegalite.v4.api import condition
-from PIL import Image
+#from PIL import Image
 import streamlit as sl
 import pandas as pd
 import altair as alt
@@ -31,7 +31,7 @@ def makeBar(df, yValue, texts, width, height, scale=0):
 
     return bar, smallText
 
-sl.image(Image.open("logoimage.png"))
+#sl.image(Image.open("logoimage.png"))
 sl.title("Minting and Transaction Report")
 sl.write(""" ### Find the minting and tranascation reports below
 """)
