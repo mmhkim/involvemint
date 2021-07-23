@@ -1,4 +1,4 @@
-from altair.vegalite.v4.api import condition
+#from altair.vegalite.v4.api import condition
 from PIL import Image
 import streamlit as sl
 import pandas as pd
