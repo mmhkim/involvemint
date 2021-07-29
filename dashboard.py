@@ -31,7 +31,7 @@ def makeBar(df, yValue, texts, width, height, scale=0):
 
     return bar, smallText
 
-sl.image(Image.open("/Users/mmhki/OneDrive/Documents/involvemint2021/logoimage.png"))
+sl.image(Image.open("logoimage.png"))
 sl.title("Minting and Transaction Report")
 sl.write(""" ### Find the minting and tranascation reports below
 """)
@@ -39,7 +39,7 @@ sl.write(""" ### Find the minting and tranascation reports below
 mintOrTrx  = sl.selectbox("Choose which report to analyze", ("Minting", "Transaction")) 
 
 if(mintOrTrx == "Minting"):
-    df = pd.read_csv("/Users/mmhki/OneDrive/Documents/involvemint2021/updatedreportscripts/july2021mintingreports/julymintingreport2021.csv")
+    df = pd.read_csv("julymintingreport2021.csv")
     
     # total credits minted
 
@@ -86,7 +86,7 @@ else:
     trxType  = sl.selectbox("Choose which transaction report to analyze", ("Monthly Overall", "Monthly by Type", "Weekly by Type")) 
 
     if(trxType == "Monthly Overall"):
-        monthly_df = pd.read_csv("/Users/mmhki/OneDrive/Documents/involvemint2021/updatedreportscripts/july2021txreports/julymonthlytxreport2021.csv")
+        monthly_df = pd.read_csv("julymonthlytxreport2021.csv")
 
         # make transaction count bar chart
         totalMonthly, text = makeBar(monthly_df, 'Transaction Count', 'Transaction Count', 720, 480)
@@ -100,10 +100,10 @@ else:
     
     elif(trxType == "Monthly by Type"):
         # creates monthly by type
-        monthly_df = pd.read_csv("/Users/mmhki/OneDrive/Documents/involvemint2021/updatedreportscripts/july2021txreports/julymonthlytxtypereport2021.csv", index_col="Month")
+        monthly_df = pd.read_csv("julymonthlytxtypereport2021.csv", index_col="Month")
         sl.write(monthly_df)
     
     elif(trxType == "Weekly by Type"):
         # creates weekly by type
-        weekly_df = pd.read_csv("/Users/mmhki/OneDrive/Documents/involvemint2021/updatedreportscripts/july2021txreports/julyweeklytxtypereport2021.csv", index_col="Month")
+        weekly_df = pd.read_csv("julyweeklytxtypereport2021.csv", index_col="Month")
         sl.write(weekly_df)
