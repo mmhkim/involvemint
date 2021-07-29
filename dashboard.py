@@ -31,7 +31,7 @@ def makeBar(df, yValue, texts, width, height, scale=0):
 
     return bar, smallText
 
-sl.image(Image.open("logoimage.png"))
+sl.image(Image.open("/Users/mmhki/OneDrive/Documents/involvemint2021/logoimage.png"))
 sl.title("Minting and Transaction Report")
 sl.write(""" ### Find the minting and tranascation reports below
 """)
@@ -39,7 +39,7 @@ sl.write(""" ### Find the minting and tranascation reports below
 mintOrTrx  = sl.selectbox("Choose which report to analyze", ("Minting", "Transaction")) 
 
 if(mintOrTrx == "Minting"):
-    df = pd.read_csv("julymintingreport2021.csv")
+    df = pd.read_csv("/Users/mmhki/OneDrive/Documents/involvemint2021/updatedreportscripts/july2021mintingreports/julymintingreport2021.csv")
     
     # total credits minted
 
@@ -47,30 +47,46 @@ if(mintOrTrx == "Minting"):
 
     sl.write(totalMint+text)
 
-    # avg per ___
-    avg = sl.multiselect("Choose which months to compare", list(df["Month"]))
+    start = sl.selectbox("Select a start month", list(df["Month"]))
+    end = sl.selectbox("Select a end month", list(df["Month"]))
+    startIndex = df[df["Month"] == start].index.values[0]
+    endIndex = df[df["Month"] == end].index.values[0]
 
-    # filter date parameted
-    if not avg:
-        pass
+    if(endIndex - startIndex <= 0):
+        sl.write("This is not a real time frame")
+
     else:
-        filter1 = df["Month"].isin(avg)
-        df = df[filter1]
-    
-    # adjust the scaling of bar chart
-    cmMax = df["Avg Credits per CM"].max()
 
-    avgPOI, poiText = makeBar(df, 'Avg Credits per POI', 'Avg Credits per POI', 360, 240, cmMax)
-    avgCM, cmText = makeBar(df, 'Avg Credits per CM', 'Avg Credits per CM', 360, 240)
+        df = df.iloc[startIndex:endIndex+1]
+        
+        # adjust the scaling of bar chart
+        cmMax = df["Avg Credits per CM"].max()
 
-    sl.write(avgPOI+poiText|avgCM+cmText)
+
+        melted = pd.melt(df, id_vars = ['Month'], value_vars=['Avg Credits per POI', 'Avg Credits per CM'])
+
+        bar = alt.Chart(melted).mark_bar().encode(
+            x = alt.X("variable"), 
+            y = alt.Y("value"),
+            color = 'variable',
+            column= alt.Column('Month', sort=melted["Month"].tolist())
+        ).properties(   
+            title = " Amount vs. Months"
+        )
+        sl.write(bar)
+
+
+        avgPOI, poiText = makeBar(df, 'Avg Credits per POI', 'Avg Credits per POI', 360, 240, cmMax)
+        avgCM, cmText = makeBar(df, 'Avg Credits per CM', 'Avg Credits per CM', 360, 240)
+
+        sl.write(avgPOI+poiText|avgCM+cmText)
 
 else:
 
     trxType  = sl.selectbox("Choose which transaction report to analyze", ("Monthly Overall", "Monthly by Type", "Weekly by Type")) 
 
     if(trxType == "Monthly Overall"):
-        monthly_df = pd.read_csv("julymonthlytxreport2021.csv")
+        monthly_df = pd.read_csv("/Users/mmhki/OneDrive/Documents/involvemint2021/updatedreportscripts/july2021txreports/julymonthlytxreport2021.csv")
 
         # make transaction count bar chart
         totalMonthly, text = makeBar(monthly_df, 'Transaction Count', 'Transaction Count', 720, 480)
@@ -84,10 +100,10 @@ else:
     
     elif(trxType == "Monthly by Type"):
         # creates monthly by type
-        monthly_df = pd.read_csv("julymonthlytxtypereport2021.csv", index_col="Month")
+        monthly_df = pd.read_csv("/Users/mmhki/OneDrive/Documents/involvemint2021/updatedreportscripts/july2021txreports/julymonthlytxtypereport2021.csv", index_col="Month")
         sl.write(monthly_df)
     
     elif(trxType == "Weekly by Type"):
         # creates weekly by type
-        weekly_df = pd.read_csv("julyweeklytxtypereport2021.csv", index_col="Month")
+        weekly_df = pd.read_csv("/Users/mmhki/OneDrive/Documents/involvemint2021/updatedreportscripts/july2021txreports/julyweeklytxtypereport2021.csv", index_col="Month")
         sl.write(weekly_df)
