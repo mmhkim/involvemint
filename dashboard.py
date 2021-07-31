@@ -47,10 +47,13 @@ if(mintOrTrx == "Minting"):
 
     sl.write(totalMint+text)
 
-    start = sl.selectbox("Select a start month", list(df["Month"]))
-    end = sl.selectbox("Select a end month", list(df["Month"]))
-    startIndex = df[df["Month"] == start].index.values[0]
-    endIndex = df[df["Month"] == end].index.values[0]
+    startDate = sl.date_input("Give Start Date")
+    endDate = sl.date_input("Give End Date")
+    startDate = startDate.strftime('%b-%Y').replace("20", "", 1)
+    endDate = endDate.strftime('%b-%Y').replace("20", "", 1)
+
+    startIndex = df[df["Month"] == startDate].index.values[0]
+    endIndex = df[df["Month"] == endDate].index.values[0]
 
     if(endIndex - startIndex <= 0):
         sl.write("This is not a real time frame")
