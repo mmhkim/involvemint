@@ -52,37 +52,41 @@ if(mintOrTrx == "Minting"):
     startDate = startDate.strftime('%b-%Y').replace("20", "", 1)
     endDate = endDate.strftime('%b-%Y').replace("20", "", 1)
 
-    startIndex = df[df["Month"] == startDate].index.values[0]
-    endIndex = df[df["Month"] == endDate].index.values[0]
-
-    if(endIndex - startIndex <= 0):
-        sl.write("This is not a real time frame")
-
+    if(startDate not in df["Month"]):
+        sl.write("Data Not Available in this Timeframe")
+    
     else:
+        startIndex = df[df["Month"] == startDate].index.values[0]
+        endIndex = df[df["Month"] == endDate].index.values[0]
 
-        df = df.iloc[startIndex:endIndex+1]
-        
-        # adjust the scaling of bar chart
-        cmMax = df["Avg Credits per CM"].max()
+        if(endIndex - startIndex <= 0):
+            sl.write("This is not a real time frame")
 
+        else:
 
-        melted = pd.melt(df, id_vars = ['Month'], value_vars=['Avg Credits per POI', 'Avg Credits per CM'])
-
-        bar = alt.Chart(melted).mark_bar().encode(
-            x = alt.X("variable"), 
-            y = alt.Y("value"),
-            color = 'variable',
-            column= alt.Column('Month', sort=melted["Month"].tolist())
-        ).properties(   
-            title = " Amount vs. Months"
-        )
-        sl.write(bar)
+            df = df.iloc[startIndex:endIndex+1]
+            
+            # adjust the scaling of bar chart
+            cmMax = df["Avg Credits per CM"].max()
 
 
-        avgPOI, poiText = makeBar(df, 'Avg Credits per POI', 'Avg Credits per POI', 360, 240, cmMax)
-        avgCM, cmText = makeBar(df, 'Avg Credits per CM', 'Avg Credits per CM', 360, 240)
+            melted = pd.melt(df, id_vars = ['Month'], value_vars=['Avg Credits per POI', 'Avg Credits per CM'])
 
-        sl.write(avgPOI+poiText|avgCM+cmText)
+            bar = alt.Chart(melted).mark_bar().encode(
+                x = alt.X("variable"), 
+                y = alt.Y("value"),
+                color = 'variable',
+                column= alt.Column('Month', sort=melted["Month"].tolist())
+            ).properties(   
+                title = " Amount vs. Months"
+            )
+            sl.write(bar)
+
+
+            avgPOI, poiText = makeBar(df, 'Avg Credits per POI', 'Avg Credits per POI', 360, 240, cmMax)
+            avgCM, cmText = makeBar(df, 'Avg Credits per CM', 'Avg Credits per CM', 360, 240)
+
+            sl.write(avgPOI+poiText|avgCM+cmText)
 
 else:
 
