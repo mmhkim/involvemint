@@ -1,6 +1,7 @@
-#from altair.vegalite.v4.api import condition
 from PIL import Image
+from datetime import datetime as dt
 import streamlit as sl
+import numpy as np
 import pandas as pd
 import altair as alt
 import seaborn as sns
@@ -36,7 +37,7 @@ sl.title("Minting and Transaction Report")
 sl.write(""" ### Find the minting and tranascation reports below
 """)
 
-mintOrTrx  = sl.selectbox("Choose which report to analyze", ("Minting", "Transaction")) 
+mintOrTrx  = sl.selectbox("Choose which report to analyze", ("Minting", "Transaction", "Monthly Plan - All Hands")) 
 
 if(mintOrTrx == "Minting"):
     df = pd.read_csv("julymintingreport2021.csv")
@@ -47,19 +48,20 @@ if(mintOrTrx == "Minting"):
 
     sl.write(totalMint+text)
 
+
     startDate = sl.date_input("Give Start Date")
     endDate = sl.date_input("Give End Date")
-    startDate = startDate.strftime('%b-%Y').replace("20", "", 1)
-    endDate = endDate.strftime('%b-%Y').replace("20", "", 1)
+    startDate = startDate.strftime('%Y-%b').replace("20", "", 1)
+    endDate = endDate.strftime('%Y-%b').replace("20", "", 1)
 
-    if(startDate not in df["Month"]):
+    if(startDate not in df["Month"].tolist()):
         sl.write("Data Not Available in this Timeframe")
     
     else:
         startIndex = df[df["Month"] == startDate].index.values[0]
         endIndex = df[df["Month"] == endDate].index.values[0]
 
-        if(endIndex - startIndex <= 0):
+        if(endIndex - startIndex < 0):
             sl.write("This is not a real time frame")
 
         else:
@@ -88,7 +90,7 @@ if(mintOrTrx == "Minting"):
 
             sl.write(avgPOI+poiText|avgCM+cmText)
 
-else:
+elif(mintOrTrx == "Transaction"):
 
     trxType  = sl.selectbox("Choose which transaction report to analyze", ("Monthly Overall", "Monthly by Type", "Weekly by Type")) 
 
@@ -114,3 +116,9 @@ else:
         # creates weekly by type
         weekly_df = pd.read_csv("julyweeklytxtypereport2021.csv", index_col="Month")
         sl.write(weekly_df)
+
+else:
+    new_df = {'':["# of ChangeMakers Served", "ChangeMaker Hours", "# of ExchangePartners", "Average ExchangePartner Budget", "ServePartners", "# of Paying Customers"], 
+            'Goal': [6.0, 27.0, 18.0, 170.0, np.nan, 0.0], 'Actual':[7, 110, np.nan, np.nan, np.nan, np.nan], 'Next':[6.0, 28.0, 20.0, 180.0, np.nan, np.nan] }
+    new_df = pd.DataFrame(new_df)
+    sl.write(new_df)
