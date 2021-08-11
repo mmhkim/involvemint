@@ -40,7 +40,7 @@ sl.write(""" ### Find the minting and tranascation reports below
 mintOrTrx  = sl.selectbox("Choose which report to analyze", ("Minting", "Transaction", "Monthly Plan - All Hands")) 
 
 if(mintOrTrx == "Minting"):
-    df = pd.read_csv("julymintingreport2021.csv")
+    df = pd.read_csv("augustmintingreport2021.csv")
     
     # total credits minted
 
@@ -49,10 +49,10 @@ if(mintOrTrx == "Minting"):
     sl.write(totalMint+text)
 
 
-    startDate = sl.date_input("Give Start Date")
-    endDate = sl.date_input("Give End Date")
-    startDate = startDate.strftime('%Y-%b').replace("20", "", 1)
-    endDate = endDate.strftime('%Y-%b').replace("20", "", 1)
+    startDate = sl.selectbox("Give Start Date:", df["Month"])
+    endDate = sl.selectbox("Give End Date:", df["Month"])
+    #startDate = startDate.strftime('%Y-%b').replace("20", "", 1)
+    #endDate = endDate.strftime('%Y-%b').replace("20", "", 1)
 
     if(startDate not in df["Month"].tolist()):
         sl.write("Data Not Available in this Timeframe")
