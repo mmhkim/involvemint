@@ -119,6 +119,6 @@ elif(mintOrTrx == "Transaction"):
 
 else:
     new_df = {'':["# of ChangeMakers Served", "ChangeMaker Hours", "# of ExchangePartners", "Average ExchangePartner Budget", "ServePartners", "# of Paying Customers"], 
-            'Goal': [6.0, 27.0, 18.0, 170.0, np.nan, 0.0], 'Actual':[7, 110, np.nan, np.nan, np.nan, np.nan], 'Next':[6.0, 28.0, 20.0, 180.0, np.nan, np.nan] }
+            'Goal': [6.0, 27.0, 18.0, 170.0, np.nan, 0.0], 'Actual':[7, 110, 19, np.nan, np.nan, np.nan], 'Next':[6.0, 28.0, 20.0, 180.0, np.nan, np.nan] }
     new_df = pd.DataFrame(new_df)
     sl.write(new_df)
